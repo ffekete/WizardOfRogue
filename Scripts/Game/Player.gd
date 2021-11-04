@@ -3,14 +3,17 @@ extends Area2D
 signal hit
 
 export var speed = 0.75
+export var turn_speed = 0.15
 
 onready var tween = $Tween
 onready var ray = $RayCast2D
 onready var attack_timer = $AttackTimer
+onready var turn_timer = $TurnTimer
 
 var tile_size = Global.grid_size
 var screen_size
 var next_dir
+var currentDir
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +21,8 @@ func _ready():
 	$AnimatedSprite.flip_h = false
 	$AnimatedSprite.play()
 	attack_timer.one_shot = true
+	turn_timer.one_shot = true
+	currentDir = "right"
 
 func _process(delta):
 
@@ -56,31 +61,55 @@ func _process(delta):
 			
 	if(!attack_timer.is_stopped()):
 		return
-			
+	
+	
 	if(Input.is_action_pressed("ui_up")):
-		$AnimatedSprite.animation = "walk"
-		move_with_collision_check(Global.inputs["up"])
-		_position_up()
-		next_dir = Vector2.UP
+		
+		if(turn_timer.is_stopped() && currentDir != "up"):
+			_position_up()
+			turn_timer.start(turn_speed)
+			next_dir = Vector2.UP
+		else:
+			if(turn_timer.is_stopped()):
+				$AnimatedSprite.animation = "walk"
+				move_with_collision_check(Global.inputs["up"])
+				_position_up()
+				next_dir = Vector2.UP
 		
 	elif(Input.is_action_pressed("ui_down")):
-		$AnimatedSprite.animation = "walk"
-		move_with_collision_check(Global.inputs["down"])
-		_position_down()
-		next_dir = Vector2.DOWN
+		if(turn_timer.is_stopped() && currentDir != "down"):
+			_position_down()
+			turn_timer.start(turn_speed)
+			next_dir = Vector2.DOWN
+		else:
+			if(turn_timer.is_stopped()):
+				$AnimatedSprite.animation = "walk"
+				move_with_collision_check(Global.inputs["down"])
+				_position_down()
 		
 	elif(Input.is_action_pressed("ui_left")):
-		$AnimatedSprite.animation = "walk"
-		move_with_collision_check(Global.inputs["left"])
-		_position_left()
-		next_dir = Vector2.LEFT
-		
+		if(turn_timer.is_stopped() && currentDir != "left"):
+			_position_left()
+			turn_timer.start(turn_speed)
+			next_dir = Vector2.LEFT
+		else:
+			if(turn_timer.is_stopped()):
+				$AnimatedSprite.animation = "walk"
+				move_with_collision_check(Global.inputs["left"])
+				_position_left()
+				next_dir = Vector2.LEFT
 		
 	elif(Input.is_action_pressed("ui_right")):
-		$AnimatedSprite.animation = "walk"
-		move_with_collision_check(Global.inputs["right"])
-		_position_right()
-		next_dir = Vector2.RIGHT
+		if(turn_timer.is_stopped() && currentDir != "right"):
+			_position_right()
+			turn_timer.start(turn_speed)
+			next_dir = Vector2.RIGHT
+		else:
+			if(turn_timer.is_stopped()):
+				$AnimatedSprite.animation = "walk"
+				move_with_collision_check(Global.inputs["right"])
+				_position_right()
+				next_dir = Vector2.RIGHT
 		
 		
 	elif(Input.is_action_pressed("ui_fire")):
@@ -93,7 +122,7 @@ func _process(delta):
 			$AnimatedSprite.animation = "idle"
 
 func move_with_collision_check(dir):
-	ray.cast_to = dir * tile_size / 2
+	ray.cast_to = dir * tile_size
 	ray.force_raycast_update()
 	if(!ray.is_colliding()):
 		move(dir)
@@ -121,17 +150,21 @@ func _position_up():
 	$AnimatedSprite.flip_v = true
 	$AnimatedSprite.rotation_degrees = 270
 	$AnimatedSprite.flip_h = false
+	currentDir = "up"
 	
 func _position_down():
 	$AnimatedSprite.rotation_degrees =  90
 	$AnimatedSprite.flip_h = false	
+	currentDir = "down"
 	
 func _position_left():
 	$AnimatedSprite.rotation_degrees = 0
 	$AnimatedSprite.flip_v = false
 	$AnimatedSprite.flip_h = true
+	currentDir = "left"
 	
 func _position_right():
 	$AnimatedSprite.rotation_degrees = 0
 	$AnimatedSprite.flip_v = false
 	$AnimatedSprite.flip_h = false
+	currentDir = "right"

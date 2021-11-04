@@ -4,7 +4,7 @@
 [ext_resource path="res://sprites/Wall_left.png" type="Texture" id=2]
 [ext_resource path="res://sprites/Wall_right.png" type="Texture" id=3]
 [ext_resource path="res://sprites/Wall_bottom.png" type="Texture" id=4]
-[ext_resource path="res://Wall.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Game/Wall.gd" type="Script" id=5]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )

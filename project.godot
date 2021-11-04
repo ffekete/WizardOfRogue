@@ -11,12 +11,12 @@ config_version=4
 [application]
 
 config/name="Roguelite"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Scenes/Game/Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://Global.gd"
+Global="*res://Scripts/Global.gd"
 
 [display]
 

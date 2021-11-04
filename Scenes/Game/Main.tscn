@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/Game/Main.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Game/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scripts/Game/Camera2D.gd" type="Script" id=4]
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+CaveTile = ExtResource( 2 )
+Player = ExtResource( 3 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 120.92, 63.8376 )
+current = true
+script = ExtResource( 4 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
