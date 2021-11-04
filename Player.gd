@@ -24,30 +24,23 @@ func _process(delta):
 	if(tween.is_active()):
 		return
 
-
 	if(Input.is_action_pressed("ui_fire")):
 		if(attack_timer.is_stopped()):
 			$AnimatedSprite.animation = "attack"
 			attack_timer.start(0.5)
+			$AnimatedSprite.frames.set_animation_speed("attack", 4)
 		
 			if(next_dir == Vector2.UP):
-				$AnimatedSprite.flip_v = true
-				$AnimatedSprite.rotation_degrees = 270
-				$AnimatedSprite.flip_h = false
+				_position_up()
 				
 			if(next_dir == Vector2.DOWN):
-				$AnimatedSprite.rotation_degrees =  90
-				$AnimatedSprite.flip_h = false	
+				_position_down()
 				
 			if(next_dir == Vector2.LEFT):
-				$AnimatedSprite.rotation_degrees = 0
-				$AnimatedSprite.flip_v = false
-				$AnimatedSprite.flip_h = true
+				_position_left()
 		
 			if(next_dir == Vector2.RIGHT):
-				$AnimatedSprite.rotation_degrees = 0
-				$AnimatedSprite.flip_v = false
-				$AnimatedSprite.flip_h = false
+				_position_right()
 		else:
 			if(Input.is_action_pressed("ui_up")):
 				next_dir = Vector2.UP
@@ -67,33 +60,26 @@ func _process(delta):
 	if(Input.is_action_pressed("ui_up")):
 		$AnimatedSprite.animation = "walk"
 		move_with_collision_check(Global.inputs["up"])
-		$AnimatedSprite.flip_v = true
-		$AnimatedSprite.rotation_degrees = 270
-		$AnimatedSprite.flip_h = false
+		_position_up()
 		next_dir = Vector2.UP
 		
 	elif(Input.is_action_pressed("ui_down")):
 		$AnimatedSprite.animation = "walk"
 		move_with_collision_check(Global.inputs["down"])
-		$AnimatedSprite.rotation_degrees =  90
-		$AnimatedSprite.flip_h = false
+		_position_down()
 		next_dir = Vector2.DOWN
 		
 	elif(Input.is_action_pressed("ui_left")):
 		$AnimatedSprite.animation = "walk"
 		move_with_collision_check(Global.inputs["left"])
-		$AnimatedSprite.rotation_degrees = 0
-		$AnimatedSprite.flip_v = false
-		$AnimatedSprite.flip_h = true
+		_position_left()
 		next_dir = Vector2.LEFT
 		
 		
 	elif(Input.is_action_pressed("ui_right")):
 		$AnimatedSprite.animation = "walk"
 		move_with_collision_check(Global.inputs["right"])
-		$AnimatedSprite.rotation_degrees = 0
-		$AnimatedSprite.flip_v = false
-		$AnimatedSprite.flip_h = false
+		_position_right()
 		next_dir = Vector2.RIGHT
 		
 		
@@ -107,7 +93,7 @@ func _process(delta):
 			$AnimatedSprite.animation = "idle"
 
 func move_with_collision_check(dir):
-	ray.cast_to = dir * tile_size
+	ray.cast_to = dir * tile_size / 2
 	ray.force_raycast_update()
 	if(!ray.is_colliding()):
 		move(dir)
@@ -131,3 +117,21 @@ func _on_Player_body_entered(body):
 func _on_AttackTimer_timeout():
 	$AnimatedSprite.animation = "idle"
 	
+func _position_up():
+	$AnimatedSprite.flip_v = true
+	$AnimatedSprite.rotation_degrees = 270
+	$AnimatedSprite.flip_h = false
+	
+func _position_down():
+	$AnimatedSprite.rotation_degrees =  90
+	$AnimatedSprite.flip_h = false	
+	
+func _position_left():
+	$AnimatedSprite.rotation_degrees = 0
+	$AnimatedSprite.flip_v = false
+	$AnimatedSprite.flip_h = true
+	
+func _position_right():
+	$AnimatedSprite.rotation_degrees = 0
+	$AnimatedSprite.flip_v = false
+	$AnimatedSprite.flip_h = false
