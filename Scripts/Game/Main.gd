@@ -9,8 +9,8 @@ var tile_size = Global.grid_size
 onready var player = get_node("Player")
 onready var rng = RandomNumberGenerator.new()
 
-var maze_width = 8
-var maze_height = 8
+var maze_width = 12
+var maze_height = 6
 
 var cell_length = 2
 
@@ -66,7 +66,9 @@ func _ready():
 
 	display_debug()
 	
+	remove_walls(50)
 	place_walls()
+	
 				
 	player.start(Vector2(16, 16))
 
@@ -105,25 +107,27 @@ func place_walls():
 	for i in range(maze_height):
 		for j in range(maze_width):
 			# north
-			var x = i * cell_length
-			var y = j * 2
-			last_j = y
-			if((grid[i][j] & 1) == 0):
+			var x = j * cell_length
+			var y = i * 2
+			last_j = x
+			
+			if((grid[j][i] & 1) == 0):
 				
 				for k in range (0, cell_length):
 					set_wall(x + k, y)
 			else:
 				set_wall(x, y)
 				
-		set_wall(i, last_j)
+#		set_wall(last_j, i)
 		
 		for j in range(maze_width):
 			# west
-			var x = i * cell_length
-			var y = j * 2
-			last_i = x
-			last_j = y
-			if((grid[i][j] & 8) == 0):
+			var x = j * cell_length
+			var y = i * 2
+			last_i = y
+			last_j = x
+			
+			if((grid[j][i] & 8) == 0):
 					set_wall(x, y + 1)
 				
 			else:
@@ -131,13 +135,44 @@ func place_walls():
 		
 	for j in range(0, x * 2):
 		var y = maze_height * 2
-		
+
 		for k in range (0, cell_length):
 			set_wall(j + k, y)
 			
 	for j in range(0, y * 2):
 		var x = maze_width * 2
 		set_wall(x, j)
+	
+		
+func remove_walls(amount):
+	var walls = Array()
+	for i in range(2, maze_width - 1):
+		for j in range(2, maze_height - 1):
+			
+			if(grid[i][j] & 1 == 0):
+				walls.append({Vector2(i,j): 1})
+				
+			if(grid[i][j] & 8 == 0):
+				walls.append({Vector2(i,j): 8})
+	
+	walls.shuffle()
+	print("nr of walls ", walls.size())
+	
+	for i in range(0, min(amount, walls.size())):
+		var current_tile = walls.pop_front()
+		
+		var key = current_tile.keys()[0]
+		var dir = current_tile[key]
+		var opposite
+		if(dir == 1):
+			opposite = 8
+		else:
+			opposite = 1
+		
+		print(key)
+		grid[key.x][key.y] |= dir
+		grid[key.x][key.y-1] |= opposite
+		
 	
 		
 func display_debug():
