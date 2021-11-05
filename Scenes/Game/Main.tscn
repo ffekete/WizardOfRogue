@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Scripts/Game/Main.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Game/DungeonMain.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Game/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/Game/Camera2D.gd" type="Script" id=4]
