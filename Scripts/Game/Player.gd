@@ -2,6 +2,9 @@ extends Area2D
 
 signal hit
 
+export (PackedScene) var Bullet
+var main = load("res://Scenes/Game/Main.tscn")
+
 export var speed = 0.75
 export var turn_speed = 0.15
 
@@ -31,9 +34,10 @@ func _process(delta):
 
 	if(Input.is_action_pressed("ui_fire")):
 		if(attack_timer.is_stopped()):
+			
 			$AnimatedSprite.animation = "attack"
-			attack_timer.start(0.5)
-			$AnimatedSprite.frames.set_animation_speed("attack", 4)
+			attack_timer.start(1)
+			$AnimatedSprite.frames.set_animation_speed("attack", 6)
 		
 			if(next_dir == Vector2.UP):
 				_position_up()
@@ -59,9 +63,8 @@ func _process(delta):
 			if(Input.is_action_pressed("ui_right")):
 				next_dir = Vector2.RIGHT
 			
-	if(!attack_timer.is_stopped()):
+	if(!attack_timer.is_stopped() && Input.is_action_pressed("ui_fire")):
 		return
-	
 	
 	if(Input.is_action_pressed("ui_up")):
 		
@@ -110,13 +113,6 @@ func _process(delta):
 				move_with_collision_check(Global.inputs["right"])
 				_position_right()
 				next_dir = Vector2.RIGHT
-		
-		
-	elif(Input.is_action_pressed("ui_fire")):
-		if(attack_timer.is_stopped()):
-			$AnimatedSprite.animation = "attack"
-			attack_timer.start(0.5)
-		
 	else:
 		if(attack_timer.is_stopped()):
 			$AnimatedSprite.animation = "idle"
@@ -168,3 +164,36 @@ func _position_right():
 	$AnimatedSprite.flip_v = false
 	$AnimatedSprite.flip_h = false
 	currentDir = "right"
+
+
+func _on_AnimatedSprite_animation_finished():
+	if($AnimatedSprite.animation == "attack"):
+		
+		$AnimatedSprite.animation = "idle"
+			
+		var bullet = Bullet.instance()
+		get_parent().add_child(bullet)
+		bullet.set_speed(100)
+		
+		var direction
+		
+		if(currentDir == "up"):
+			direction = Vector2(0, -1)
+			bullet.rotation_degrees = 90.0
+		
+		if(currentDir == "down"):
+			direction = Vector2(0, 1)
+			bullet.rotation_degrees = 270.0
+			
+		if(currentDir == "right"):
+			direction = Vector2(1, 0)
+			bullet.rotation_degrees = 0.0
+		
+		if(currentDir == "left"):
+			direction = Vector2(-1, 0)
+			bullet.rotation_degrees = 180.0
+		
+		bullet.set_direction(direction)
+		bullet.set_position(position)
+		bullet.start()
+		

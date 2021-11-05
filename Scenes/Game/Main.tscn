@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Game/DungeonMain.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Game/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/Game/Camera2D.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/Game/Bullet.tscn" type="PackedScene" id=5]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 CaveTile = ExtResource( 2 )
 Player = ExtResource( 3 )
+Bullet = ExtResource( 5 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 120.92, 63.8376 )

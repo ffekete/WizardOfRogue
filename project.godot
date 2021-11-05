@@ -70,6 +70,17 @@ ui_fire={
  ]
 }
 
+[layer_names]
+
+2d_render/layer_1="player"
+2d_physics/layer_1="Player"
+2d_render/layer_2="enemy"
+2d_physics/layer_2="Enemy"
+2d_render/layer_3="blocks"
+2d_physics/layer_3="Tile"
+2d_render/layer_4="bullet"
+2d_physics/layer_4="bullet"
+
 [physics]
 
 common/enable_pause_aware_picking=true

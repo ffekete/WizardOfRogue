@@ -2,6 +2,9 @@ extends Node
 
 export (PackedScene) var CaveTile
 export (PackedScene) var Player
+export (PackedScene) var Bullet
+
+
 export var maze_width = 12
 export var maze_height = 6
 export var _seed = 1000
