@@ -30,14 +30,33 @@ func _ready():
 func _process(delta):
 
 	if(tween.is_active()):
+		if(Input.is_action_pressed("ui_up")):
+			next_dir = Vector2.UP
+		if(Input.is_action_pressed("ui_down")):
+			next_dir = Vector2.DOWN
+		if(Input.is_action_pressed("ui_left")):
+			next_dir = Vector2.LEFT
+		if(Input.is_action_pressed("ui_right")):
+			next_dir = Vector2.RIGHT
 		return
+
+	if(next_dir != null):
+		match(next_dir):
+			Vector2.UP:
+				_position_up()
+			Vector2.DOWN:
+				_position_down()
+			Vector2.LEFT:
+				_position_left()
+			_: 
+				_position_right()
 
 	if(Input.is_action_pressed("ui_fire")):
 		if(attack_timer.is_stopped()):
 			
 			$AnimatedSprite.animation = "attack"
 			attack_timer.start(1)
-			$AnimatedSprite.frames.set_animation_speed("attack", 6)
+			$AnimatedSprite.frames.set_animation_speed("attack", 12)
 		
 			if(next_dir == Vector2.UP):
 				_position_up()
@@ -173,7 +192,7 @@ func _on_AnimatedSprite_animation_finished():
 			
 		var bullet = Bullet.instance()
 		get_parent().add_child(bullet)
-		bullet.set_speed(100)
+		bullet.set_speed(200)
 		
 		var direction
 		
