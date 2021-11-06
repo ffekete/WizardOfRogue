@@ -1,6 +1,7 @@
 extends Area2D
 
 var main = load("res://Scenes/Game/Main.tscn")
+var explode = load("res://Scenes/Game/Explode.tscn")
 
 var speed
 var direction
@@ -27,4 +28,8 @@ func start():
 	started = true
 
 func _on_Area2D_area_shape_entered(area_id, area, area_shape, local_shape):
+	var e = explode.instance()
+	e.position = position
+	e.rotation_degrees = rotation_degrees
+	get_parent().add_child(e)
 	get_parent().remove_child(self)
