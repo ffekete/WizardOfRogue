@@ -7,16 +7,23 @@ var main = load("res://Scenes/Game/Main.tscn")
 
 export var speed = 0.75
 export var turn_speed = 0.15
+export var attack_speed = 0.3
+export var max_ammo = 5
+export var reload_speed = 1
+
 
 onready var tween = $Tween
 onready var ray = $RayCast2D
 onready var attack_timer = $AttackTimer
 onready var turn_timer = $TurnTimer
+onready var reload_timer = $ReloadTimer
+onready var reload_anim = $ReloadAnimatedSprite
 
 var tile_size = Global.grid_size
 var screen_size
 var next_dir
 var currentDir
+var ammo
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,11 +31,15 @@ func _ready():
 	$AnimatedSprite.flip_h = false
 	$AnimatedSprite.play()
 	attack_timer.one_shot = true
+	reload_timer.one_shot = true
 	turn_timer.one_shot = true
 	currentDir = "right"
+	ammo = max_ammo
+	reload_anim.visible = false
 
 func _process(delta):
 
+	# set up nex direction if already moving to next tile
 	if(tween.is_active()):
 		if(Input.is_action_pressed("ui_up")):
 			next_dir = Vector2.UP
@@ -40,6 +51,7 @@ func _process(delta):
 			next_dir = Vector2.RIGHT
 		return
 
+	# if next direction is already set then position
 	if(next_dir != null):
 		match(next_dir):
 			Vector2.UP:
@@ -51,24 +63,40 @@ func _process(delta):
 			_: 
 				_position_right()
 
+	# is player firing?
 	if(Input.is_action_pressed("ui_fire")):
-		if(attack_timer.is_stopped()):
+		if(attack_timer.is_stopped() && reload_timer.is_stopped()):
 			
-			$AnimatedSprite.animation = "attack"
-			attack_timer.start(1)
-			$AnimatedSprite.frames.set_animation_speed("attack", 12)
-		
-			if(next_dir == Vector2.UP):
-				_position_up()
+			# there is ammo so shoot
+			if(ammo > 0):
+				$AnimatedSprite.animation = "attack"
+				attack_timer.start(attack_speed)
+				ammo -= 1
+				$AnimatedSprite.frames.set_animation_speed("attack", 12)
+			
+				if(next_dir == Vector2.UP):
+					_position_up()
+					
+				if(next_dir == Vector2.DOWN):
+					_position_down()
+					
+				if(next_dir == Vector2.LEFT):
+					_position_left()
+			
+				if(next_dir == Vector2.RIGHT):
+					_position_right()
+
+			# no ammo, reload if attack timer is up
+			elif(attack_timer.is_stopped()):
+				reload_timer.start(reload_speed)
+				ammo = max_ammo
+				reload_anim.frames.set_animation_speed("default", reload_speed * 5)
+				reload_anim.z_as_relative = false
+				reload_anim.z_index = 999
 				
-			if(next_dir == Vector2.DOWN):
-				_position_down()
-				
-			if(next_dir == Vector2.LEFT):
-				_position_left()
-		
-			if(next_dir == Vector2.RIGHT):
-				_position_right()
+				reload_anim.visible = true
+				reload_anim.play()
+				return
 		else:
 			if(Input.is_action_pressed("ui_up")):
 				next_dir = Vector2.UP
@@ -82,7 +110,7 @@ func _process(delta):
 			if(Input.is_action_pressed("ui_right")):
 				next_dir = Vector2.RIGHT
 			
-	if(!attack_timer.is_stopped() && Input.is_action_pressed("ui_fire")):
+	if(!(attack_timer.is_stopped() || reload_timer.is_stopped()) && Input.is_action_pressed("ui_fire")):
 		return
 	
 	if(Input.is_action_pressed("ui_up")):
@@ -216,3 +244,8 @@ func _on_AnimatedSprite_animation_finished():
 		bullet.set_position(position)
 		bullet.start()
 		
+
+
+func _on_ReloadAnimatedSprite_animation_finished():
+	reload_anim.visible = false
+	reload_anim.stop()
