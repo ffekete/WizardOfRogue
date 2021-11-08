@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.png-d2bb22231b5eadac1200ae8304dcd573.stex"
+path="res://.import/Main.png-105e6ab9c4a5d52150d62aadb14672d9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/BitmapFontEasy/icon.png"
-dest_files=[ "res://.import/icon.png-d2bb22231b5eadac1200ae8304dcd573.stex" ]
+source_file="res://sprites/UI/Main.png"
+dest_files=[ "res://.import/Main.png-105e6ab9c4a5d52150d62aadb14672d9.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

@@ -3,12 +3,17 @@ extends Node
 export (PackedScene) var CaveTile
 export (PackedScene) var Player
 export (PackedScene) var Bullet
-
+export (PackedScene) var Bullet_full
+export (PackedScene) var Bullet_empty
 
 export var maze_width = 12
 export var maze_height = 6
 export var _seed = 1000
 export var walls_to_remove = 20
+
+onready var ui_window = $CanvasLayer/UI_window;
+
+var ammo_shells = Array()
 
 var grid = []
 var generated_maze = []
@@ -26,6 +31,20 @@ enum Direction {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	generate()
+	update_ammo_status_bar()
+
+func update_ammo_status_bar():
+	ammo_shells.clear()
+	for i in player.ammo:
+		ammo_shells.append(Bullet_full.instance())
+		
+	for i in player.max_ammo - player.ammo:
+		ammo_shells.append(Bullet_empty.instance())
+	
+	for i in range(ammo_shells.size()):
+		var ammo_sprite = ammo_shells[i]
+		ammo_sprite.position.x = i * round(64 / ammo_shells.size()) - 230
+		ui_window.add_child(ammo_sprite)
 	
 func generate():
 	
@@ -221,3 +240,7 @@ func get_bit(direction):
 	if(direction == Direction.E):
 		return 4
 	return 8
+
+
+func _on_Player_ammo_changed():
+	update_ammo_status_bar()

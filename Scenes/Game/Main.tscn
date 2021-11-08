@@ -1,16 +1,38 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Game/DungeonMain.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Game/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/Game/Camera2D.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/Game/Bullet.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sprites/UI/Main.png" type="Texture" id=6]
+[ext_resource path="res://font/manaspc.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://Scenes/Game/UI/Bullet_empty.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Game/UI/Bullet_full.tscn" type="PackedScene" id=9]
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 480, 48 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=3]
+size = 6
+font_data = ExtResource( 7 )
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 CaveTile = ExtResource( 2 )
 Player = ExtResource( 3 )
 Bullet = ExtResource( 5 )
+Bullet_full = ExtResource( 9 )
+Bullet_empty = ExtResource( 8 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 120.92, 63.8376 )
@@ -18,3 +40,22 @@ current = true
 script = ExtResource( 4 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI_window" type="AnimatedSprite" parent="CanvasLayer"]
+position = Vector2( 240, 245 )
+frames = SubResource( 5 )
+
+[node name="Label" type="Label" parent="CanvasLayer/UI_window"]
+margin_left = -232.115
+margin_top = -17.7253
+margin_right = -140.115
+margin_bottom = -9.72534
+custom_fonts/font = SubResource( 3 )
+text = "Player 1 name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="ammo_changed" from="Player" to="." method="_on_Player_ammo_changed"]

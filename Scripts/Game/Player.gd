@@ -1,6 +1,7 @@
 extends Area2D
 
 signal hit
+signal ammo_changed
 
 export (PackedScene) var Bullet
 var main = load("res://Scenes/Game/Main.tscn")
@@ -23,7 +24,7 @@ var tile_size = Global.grid_size
 var screen_size
 var next_dir
 var currentDir
-var ammo
+export var ammo = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -38,6 +39,10 @@ func _ready():
 	reload_anim.visible = false
 
 func _process(delta):
+
+	if(Input.is_action_pressed("ui_accept")):
+		ammo = 10;
+		emit_signal("ammo_changed")
 
 	# set up nex direction if already moving to next tile
 	if(tween.is_active()):
@@ -73,6 +78,7 @@ func _process(delta):
 				attack_timer.start(attack_speed)
 				ammo -= 1
 				$AnimatedSprite.frames.set_animation_speed("attack", 12)
+				emit_signal("ammo_changed")
 			
 				if(next_dir == Vector2.UP):
 					_position_up()
@@ -249,3 +255,4 @@ func _on_AnimatedSprite_animation_finished():
 func _on_ReloadAnimatedSprite_animation_finished():
 	reload_anim.visible = false
 	reload_anim.stop()
+	emit_signal("ammo_changed")
