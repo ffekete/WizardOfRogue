@@ -4,19 +4,19 @@
 [ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Game/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/Game/Camera2D.gd" type="Script" id=4]
-[ext_resource path="res://Scenes/Game/Bullet.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/Game/Bullet/Laser.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/UI/Main.png" type="Texture" id=6]
 [ext_resource path="res://font/manaspc.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/Game/UI/Bullet_empty.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/Game/UI/Bullet_full.tscn" type="PackedScene" id=9]
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 480, 48 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ SubResource( 4 ) ],
+"frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -45,7 +45,7 @@ script = ExtResource( 4 )
 
 [node name="UI_window" type="AnimatedSprite" parent="CanvasLayer"]
 position = Vector2( 240, 245 )
-frames = SubResource( 5 )
+frames = SubResource( 2 )
 
 [node name="Label" type="Label" parent="CanvasLayer/UI_window"]
 margin_left = -232.115

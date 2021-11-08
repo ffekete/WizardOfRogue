@@ -4,7 +4,9 @@ signal hit
 signal ammo_changed
 
 export (PackedScene) var Bullet
+
 var main = load("res://Scenes/Game/Main.tscn")
+
 
 export var speed = 0.75
 export var turn_speed = 0.15
@@ -39,10 +41,6 @@ func _ready():
 	reload_anim.visible = false
 
 func _process(delta):
-
-	if(Input.is_action_pressed("ui_accept")):
-		ammo = 10;
-		emit_signal("ammo_changed")
 
 	# set up nex direction if already moving to next tile
 	if(tween.is_active()):
@@ -79,6 +77,7 @@ func _process(delta):
 				ammo -= 1
 				$AnimatedSprite.frames.set_animation_speed("attack", 12)
 				emit_signal("ammo_changed")
+				$AudioStreamPlayer.play()
 			
 				if(next_dir == Vector2.UP):
 					_position_up()

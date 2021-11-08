@@ -33,3 +33,4 @@ func _on_Area2D_area_shape_entered(area_id, area, area_shape, local_shape):
 	e.rotation_degrees = rotation_degrees
 	get_parent().add_child(e)
 	get_parent().remove_child(self)
+	
