@@ -34,16 +34,28 @@ func _ready():
 	update_ammo_status_bar()
 
 func update_ammo_status_bar():
+	for c in ammo_shells:
+		ui_window.remove_child(c)
+		
 	ammo_shells.clear()
-	for i in player.ammo:
+	for i in player.weapon.ammo:
 		ammo_shells.append(Bullet_full.instance())
 		
-	for i in player.max_ammo - player.ammo:
+	for i in player.weapon.max_ammo - player.weapon.ammo:
 		ammo_shells.append(Bullet_empty.instance())
+	
+	var cell_size = 8
+	if(ammo_shells.size() > 8):
+		cell_size = 64.0 / ammo_shells.size()
+		var diff = ammo_shells.size() * cell_size - 64
+		if(diff > 0):
+			cell_size += diff / ammo_shells.size()
 	
 	for i in range(ammo_shells.size()):
 		var ammo_sprite = ammo_shells[i]
-		ammo_sprite.position.x = i * round(64 / ammo_shells.size()) - 230
+			
+		ammo_sprite.position.x = i * cell_size - 230.0
+		ammo_sprite.position.y = -3
 		ui_window.add_child(ammo_sprite)
 	
 func generate():

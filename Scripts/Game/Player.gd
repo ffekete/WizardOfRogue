@@ -3,17 +3,11 @@ extends Area2D
 signal hit
 signal ammo_changed
 
-export (PackedScene) var Bullet
-
 var main = load("res://Scenes/Game/Main.tscn")
-
+var laser_rifle = load("res://Scenes/Game/Weapon/LaserRifle.tscn")
 
 export var speed = 0.75
 export var turn_speed = 0.15
-export var attack_speed = 0.3
-export var max_ammo = 5
-export var reload_speed = 1
-
 
 onready var tween = $Tween
 onready var ray = $RayCast2D
@@ -26,10 +20,14 @@ var tile_size = Global.grid_size
 var screen_size
 var next_dir
 var currentDir
-export var ammo = 0
+
+var weapon 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	weapon = laser_rifle.instance()
+	
 	screen_size = get_viewport_rect().size
 	$AnimatedSprite.flip_h = false
 	$AnimatedSprite.play()
@@ -37,7 +35,7 @@ func _ready():
 	reload_timer.one_shot = true
 	turn_timer.one_shot = true
 	currentDir = "right"
-	ammo = max_ammo
+	weapon.ammo = weapon.max_ammo
 	reload_anim.visible = false
 
 func _process(delta):
@@ -71,31 +69,30 @@ func _process(delta):
 		if(attack_timer.is_stopped() && reload_timer.is_stopped()):
 			
 			# there is ammo so shoot
-			if(ammo > 0):
+			if(weapon.ammo > 0):
 				$AnimatedSprite.animation = "attack"
+				var attack_speed = weapon.attack_speed
 				attack_timer.start(attack_speed)
-				ammo -= 1
 				$AnimatedSprite.frames.set_animation_speed("attack", 12)
-				emit_signal("ammo_changed")
 				$AudioStreamPlayer.play()
-			
+
 				if(next_dir == Vector2.UP):
 					_position_up()
-					
+
 				if(next_dir == Vector2.DOWN):
 					_position_down()
-					
+
 				if(next_dir == Vector2.LEFT):
 					_position_left()
-			
+
 				if(next_dir == Vector2.RIGHT):
 					_position_right()
 
 			# no ammo, reload if attack timer is up
 			elif(attack_timer.is_stopped()):
-				reload_timer.start(reload_speed)
-				ammo = max_ammo
-				reload_anim.frames.set_animation_speed("default", reload_speed * 5)
+				reload_timer.start(weapon.reload_speed)
+				weapon.ammo = weapon.max_ammo
+				reload_anim.frames.set_animation_speed("default", weapon.reload_speed * 5)
 				reload_anim.z_as_relative = false
 				reload_anim.z_index = 999
 				
@@ -115,7 +112,7 @@ func _process(delta):
 			if(Input.is_action_pressed("ui_right")):
 				next_dir = Vector2.RIGHT
 			
-	if(!(attack_timer.is_stopped() || reload_timer.is_stopped()) && Input.is_action_pressed("ui_fire")):
+	if((!attack_timer.is_stopped() || !reload_timer.is_stopped()) && Input.is_action_pressed("ui_fire")):
 		return
 	
 	if(Input.is_action_pressed("ui_up")):
@@ -220,38 +217,15 @@ func _position_right():
 
 func _on_AnimatedSprite_animation_finished():
 	if($AnimatedSprite.animation == "attack"):
-		
 		$AnimatedSprite.animation = "idle"
-			
-		var bullet = Bullet.instance()
-		get_parent().add_child(bullet)
-		bullet.set_speed(200)
-		
-		var direction
-		
-		if(currentDir == "up"):
-			direction = Vector2(0, -1)
-			bullet.rotation_degrees = 90.0
-		
-		if(currentDir == "down"):
-			direction = Vector2(0, 1)
-			bullet.rotation_degrees = 270.0
-			
-		if(currentDir == "right"):
-			direction = Vector2(1, 0)
-			bullet.rotation_degrees = 0.0
-		
-		if(currentDir == "left"):
-			direction = Vector2(-1, 0)
-			bullet.rotation_degrees = 180.0
-		
-		bullet.set_direction(direction)
-		bullet.set_position(position)
-		bullet.start()
-		
+		_shoot()
+		emit_signal("ammo_changed")
 
+func _shoot():
+	weapon._shoot(position, currentDir, get_parent())
 
 func _on_ReloadAnimatedSprite_animation_finished():
 	reload_anim.visible = false
 	reload_anim.stop()
 	emit_signal("ammo_changed")
+	$ReloadSoundPlayer.play()

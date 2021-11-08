@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/Game/Weapon/LaserRifle.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Game/Bullet/Laser.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Game/Main.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sounds/reload_finished.wav" type="AudioStream" id=4]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+Bullet = ExtResource( 2 )
+Main = ExtResource( 3 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )

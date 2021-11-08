@@ -4,7 +4,7 @@
 [ext_resource path="res://sprites/P1_idle.png" type="Texture" id=2]
 [ext_resource path="res://sprites/P1_attack.png" type="Texture" id=3]
 [ext_resource path="res://Scripts/Game/Player.gd" type="Script" id=4]
-[ext_resource path="res://Scenes/Game/Bullet/Laser.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sounds/reload_finished.wav" type="AudioStream" id=5]
 [ext_resource path="res://sprites/Reload.png" type="Texture" id=6]
 [ext_resource path="res://sounds/zap.wav" type="AudioStream" id=7]
 
@@ -29,28 +29,28 @@ atlas = ExtResource( 2 )
 region = Rect2( 64, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 1 )
 region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 16 )
+region = Rect2( 32, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 16 )
+region = Rect2( 48, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 16 )
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 16, 16 )
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=12]
 animations = [ {
@@ -59,15 +59,15 @@ animations = [ {
 "name": "idle",
 "speed": 2.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ) ],
-"loop": true,
-"name": "attack",
-"speed": 8.0
-}, {
-"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": true,
 "name": "walk",
 "speed": 4.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ) ],
+"loop": true,
+"name": "attack",
+"speed": 8.0
 } ]
 
 [sub_resource type="CapsuleShape2D" id=13]
@@ -109,7 +109,6 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true
 }
-Bullet = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 12 )
@@ -139,8 +138,13 @@ frames = SubResource( 19 )
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
 
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ReloadSoundPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
-[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
 [connection signal="animation_finished" from="ReloadAnimatedSprite" to="." method="_on_ReloadAnimatedSprite_animation_finished"]
