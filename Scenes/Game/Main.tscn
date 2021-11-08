@@ -53,7 +53,8 @@ margin_top = -17.7253
 margin_right = -140.115
 margin_bottom = -9.72534
 custom_fonts/font = SubResource( 3 )
-text = "Player 1 name"
+text = "Player 1"
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

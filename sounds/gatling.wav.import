@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/gatling.wav-5a9948e205a54ad7c273f6ccbb2a2f7d.sample"
+
+[deps]
+
+source_file="res://sounds/gatling.wav"
+dest_files=[ "res://.import/gatling.wav-5a9948e205a54ad7c273f6ccbb2a2f7d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

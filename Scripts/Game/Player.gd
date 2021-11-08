@@ -5,6 +5,7 @@ signal ammo_changed
 
 var main = load("res://Scenes/Game/Main.tscn")
 var laser_rifle = load("res://Scenes/Game/Weapon/LaserRifle.tscn")
+var laser_gatling = load("res://Scenes/Game/Weapon/GatlingLaser.tscn")
 
 export var speed = 0.75
 export var turn_speed = 0.15
@@ -26,7 +27,7 @@ var weapon
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	weapon = laser_rifle.instance()
+	weapon = laser_gatling.instance()
 	
 	screen_size = get_viewport_rect().size
 	$AnimatedSprite.flip_h = false
@@ -92,7 +93,7 @@ func _process(delta):
 			elif(attack_timer.is_stopped()):
 				reload_timer.start(weapon.reload_speed)
 				weapon.ammo = weapon.max_ammo
-				reload_anim.frames.set_animation_speed("default", weapon.reload_speed * 5)
+				reload_anim.frames.set_animation_speed("default", 5.0 / weapon.reload_speed)
 				reload_anim.z_as_relative = false
 				reload_anim.z_index = 999
 				
