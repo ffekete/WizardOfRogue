@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scripts/Game/DungeonMain.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Game/CaveTile.tscn" type="PackedScene" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://font/manaspc.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/Game/UI/Bullet_empty.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/Game/UI/Bullet_full.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Game/Map.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Game/Map/Walls.tres" type="TileSet" id=11]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 6 )
@@ -35,11 +37,12 @@ Bullet_full = ExtResource( 9 )
 Bullet_empty = ExtResource( 8 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 120.92, 63.8376 )
+position = Vector2( 240.421, 134.548 )
 current = true
 script = ExtResource( 4 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 16, 16 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -58,5 +61,14 @@ uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TileMap" parent="." instance=ExtResource( 10 )]
+position = Vector2( -8, -8 )
+tile_set = ExtResource( 11 )
+cell_size = Vector2( 16, 16 )
+show_collision = true
+centered_textures = true
+collision_layer = 4
+collision_mask = 0
 
 [connection signal="ammo_changed" from="Player" to="." method="_on_Player_ammo_changed"]

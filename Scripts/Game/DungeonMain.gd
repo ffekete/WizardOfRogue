@@ -6,7 +6,7 @@ export (PackedScene) var Bullet
 export (PackedScene) var Bullet_full
 export (PackedScene) var Bullet_empty
 
-export var maze_width = 12
+export var maze_width = 14
 export var maze_height = 6
 export var _seed = 1000
 export var walls_to_remove = 20
@@ -32,6 +32,9 @@ enum Direction {
 func _ready():
 	generate()
 	update_ammo_status_bar()
+	var diff_x = (240 - maze_width * 16)
+	
+	$Camera2D.position = Vector2(480 / 2 - diff_x, 245 / 2)
 
 func update_ammo_status_bar():
 	for c in ammo_shells:
@@ -110,11 +113,15 @@ func _randomize(cx, cy):
 func between(v, upper) -> bool:
 	return (v >= 0) && (v < upper)
 
-func set_wall(i, j):
-	var tile = CaveTile.instance()
-	tile.position.x = i * 16
-	tile.position.y = j * 16
-	add_child(tile)	
+func set_wall(i, j, value):
+	$TileMap.set_cell(i,j,value)
+	#print($TileMap.get_cell(i,j))
+	
+#func set_wall(i, j):
+#	var tile = CaveTile.instance()
+#	tile.position.x = i * 16
+#	tile.position.y = j * 16
+#	add_child(tile)	
 	
 
 func project_grid_to_generated_maze():
@@ -166,7 +173,12 @@ func place_walls():
 	for i in range(maze_width * 2 + 1):
 		for j in range(maze_height * 2 + 1):
 			if(generated_maze[i][j] == 1):
-				set_wall(i, j)
+				set_wall(i, j, 0)
+			else:
+				set_wall(i, j, -1)
+	$TileMap.update_dirty_quadrants()
+	$TileMap.update()
+	$TileMap.update_bitmask_region()
 		
 	
 		

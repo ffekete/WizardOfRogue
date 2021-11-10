@@ -32,3 +32,4 @@ position = Vector2( 0.561865, 0.468221 )
 shape = SubResource( 3 )
 
 [connection signal="area_shape_entered" from="." to="." method="_on_Area2D_area_shape_entered"]
+[connection signal="body_entered" from="." to="." method="_on_Area2D_body_entered"]

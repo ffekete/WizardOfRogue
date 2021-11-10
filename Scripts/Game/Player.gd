@@ -28,7 +28,7 @@ var weapon
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	weapon = shotgun.instance()
+	weapon = laser_gatling.instance()
 	
 	screen_size = get_viewport_rect().size
 	$AnimatedSprite.flip_h = false

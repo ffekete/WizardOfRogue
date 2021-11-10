@@ -30,3 +30,4 @@ frames = SubResource( 2 )
 shape = SubResource( 3 )
 
 [connection signal="area_shape_entered" from="." to="." method="_on_Area2D_area_shape_entered"]
+[connection signal="body_entered" from="." to="." method="_on_Area2D_body_entered"]
