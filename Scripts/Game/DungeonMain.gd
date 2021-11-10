@@ -175,7 +175,7 @@ func place_walls():
 			if(generated_maze[i][j] == 1):
 				set_wall(i, j, 0)
 			else:
-				set_wall(i, j, -1)
+				set_wall(i, j, 1)
 	$TileMap.update_dirty_quadrants()
 	$TileMap.update()
 	$TileMap.update_bitmask_region()

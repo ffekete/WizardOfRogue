@@ -43,6 +43,7 @@ script = ExtResource( 4 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 16, 16 )
+z_index = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
